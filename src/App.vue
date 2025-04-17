@@ -1,30 +1,30 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <div class="flex">
+    <!-- SideNav Component -->
+    <SideNav />
+
+    <div class="flex-1 p-4">
+      <!-- TopNav Component -->
+      <TopNav />
+
+      <!-- Router View for Dynamic Pages -->
+      <router-view />
+    </div>
+  </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import TopNav from "./components/TopNav.vue";
+import SideNav from "./components/SideNav.vue";
 
-nav {
-  padding: 30px;
-}
+export default {
+  components: {
+    TopNav,
+    SideNav,
+  },
+};
+</script>
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
+<style scoped>
+/* Global styling if needed */
 </style>
