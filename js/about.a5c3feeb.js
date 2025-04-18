@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkecommerce_frontend"]=self["webpackChunkecommerce_frontend"]||[]).push([[594],{603:function(e,n,r){r.r(n),r.d(n,{default:function(){return f}});var t=r(6768);const u={class:"about"};function c(e,n){return(0,t.uX)(),(0,t.CE)("div",u,n[0]||(n[0]=[(0,t.Lk)("h1",null,"This is an about page",-1)]))}var a=r(1241);const o={},s=(0,a.A)(o,[["render",c]]);var f=s}}]);
+//# sourceMappingURL=about.a5c3feeb.js.map
