@@ -119,7 +119,7 @@
   </div>
 </template>
 
-<script>
+<!-- <script>
 import axios from "axios";
 import _ from "lodash";
 
@@ -130,7 +130,7 @@ export default {
       products: [],
       loading: false,
       error: false,
-      backendUrl: "https://aayushchoudhary.pythonanywhere.com",
+      backendUrl: "https://aayushchoudhary.pythonanywhere.com/",
       searchQuery: "",
       selectedCategory: "",
       categories: [
@@ -215,6 +215,111 @@ export default {
     },
     clearCategory() {
       this.selectedCategory = "";
+    },
+  },
+  created() {
+    this.fetchProducts();
+  },
+};
+</script> -->
+<script>
+import axios from "axios";
+import _ from "lodash";
+
+export default {
+  name: "HomePage",
+  data() {
+    return {
+      products: [],
+      loading: false,
+      error: false,
+      backendUrl: "https://aayushchoudhary.pythonanywhere.com",
+      searchQuery: "",
+      selectedCategory: "",
+      categories: [
+        "mobile",
+        "electronics",
+        "headphones",
+        "clothings",
+        "kids wear",
+        "home & decor",
+        "sports wear",
+        "sports",
+        "softwares",
+        "laptops",
+        "musical instruments",
+        "toys",
+        "bags",
+        "beauty products",
+        "furniture",
+      ],
+    };
+  },
+  computed: {
+    filteredProducts() {
+      let filtered = this.products;
+
+      if (this.searchQuery.trim() !== "") {
+        const q = this.searchQuery.trim().toLowerCase();
+        filtered = filtered.filter(
+          (product) =>
+            product.title.toLowerCase().includes(q) ||
+            product.category.toLowerCase().includes(q)
+        );
+      }
+
+      return filtered;
+    },
+  },
+  methods: {
+    async fetchProducts(category = "") {
+      this.loading = true;
+      this.error = false;
+      try {
+        let url = `${this.backendUrl}/api/products/most-bought/`;
+        if (category) {
+          url = `${this.backendUrl}/api/products/?category=${encodeURIComponent(
+            category
+          )}`;
+        }
+        const response = await axios.get(url);
+        this.products = response.data;
+      } catch (err) {
+        console.error("API Error:", err);
+        this.error = true;
+        setTimeout(() => this.$router.push("/"), 3000);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async addToCart(productId) {
+      try {
+        const token = localStorage.getItem("token");
+        await axios.post(
+          `${this.backendUrl}/api/cart/add/`,
+          { product_id: productId, quantity: 1 },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        await this.fetchProducts(); // Optional refresh
+      } catch (err) {
+        console.error("Add to Cart Error:", err);
+      }
+    },
+    debouncedSearch: _.debounce(function () {
+      // Triggers computed property refresh
+    }, 500),
+    goToAllProducts() {
+      this.$router.push("/products");
+    },
+    async filterByCategory(category) {
+      this.selectedCategory = category;
+      await this.fetchProducts(category);
+      window.scrollTo(0, 0);
+    },
+    async clearCategory() {
+      this.selectedCategory = "";
+      await this.fetchProducts();
+      window.scrollTo(0, 0);
     },
   },
   created() {
